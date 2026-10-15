@@ -2,7 +2,7 @@
 
 Trinity is an in-game DirectX 12 mod menu for **Crimson Desert**, originally created by **XeTrinityz**, with vTweak maintenance by **Lian**. The current **v1.4.1** work targets **TU 2.02.00 (PE 1.0.0.2850)**. Older layout/signature branches remain in the source; they are not a guarantee that every feature works on every earlier title update.
 
-> **Fork (1.5.0, game 2.03.02):** adds NPC spawning with Ally / Enemy / Neutral sides and despawn, Ghost Mode, journal knowledge and elemental magic unlocks, mount and pet editing, combat options and crash fixes. See [FORK_NOTES.md](FORK_NOTES.md).
+> **Fork (1.5.1, game 2.03.02):** adds NPC spawning with Ally / Enemy / Neutral sides and despawn, Ghost Mode, journal knowledge and elemental magic unlocks, mount and pet editing, combat options, crash fixes, and compatibility with ASI mods that hook the same functions. See [FORK_NOTES.md](FORK_NOTES.md).
 
 > **Single-player use only.** Do not use this project in online or anti-cheat-protected modes. This community project is not affiliated with or endorsed by Pearl Abyss.
 

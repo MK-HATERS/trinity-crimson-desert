@@ -28,7 +28,7 @@ namespace trinity::mem
                       Fn detour, Fn* original, void** target, size_t maxMatches = 8)
     {
         *target = nullptr;
-        const uintptr_t addr = FindPattern(sig);
+        const uintptr_t addr = FindPatternOrHooked(sig, context);
         if (!addr)
         {
             if (consequence && consequence[0] != '\0')
@@ -36,8 +36,10 @@ namespace trinity::mem
             return false;
         }
 
+        // A disk-resolved (already hooked) target has 0 live matches; its
+        // uniqueness was checked against the on-disk image instead.
         const size_t matches = CountMatches(sig, maxMatches);
-        if (matches != 1)
+        if (matches > 1)
         {
             LOG_WARN("%s signature matched %zu sites - using first match @ %p.", context, matches, reinterpret_cast<void*>(addr));
         }

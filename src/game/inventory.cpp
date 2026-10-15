@@ -2388,7 +2388,7 @@ namespace trinity::game
             LOG("inventory: legacy money hooks skipped (TU 2.00+, offsets no longer valid).");
         }
 
-        const uintptr_t holderAddr = mem::FindPattern(kSig_InvGetHolder);
+        const uintptr_t holderAddr = mem::FindPatternOrHooked(kSig_InvGetHolder, "inventory: holder resolver");
         if (!holderAddr)
         {
             LOG_ERR("inventory: holder resolver signature NOT FOUND - inventory disabled.");

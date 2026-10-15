@@ -212,7 +212,7 @@ static LONG WINAPI VectoredCrashLogger(PEXCEPTION_POINTERS ep)
         {
             snprintf(diag, sizeof(diag),
                      "Cause    : Module Fault in %s while accessing address 0x%016llX.\n"
-                     "Analysis : Instruction execution in %s raised an Access Violation.",
+                     "Analysis : Raised inside %s, not Trinity. If the game kept running, that module handled it.",
                      where, static_cast<unsigned long long>(targetAddr), where);
         }
     }
@@ -239,7 +239,10 @@ static LONG WINAPI VectoredCrashLogger(PEXCEPTION_POINTERS ep)
     char report[4096];
     snprintf(report, sizeof(report),
         "\n================================================================================\n"
-        "CRIMSON DESERT - TRINITY CRASH REPORT\n"
+        "CRIMSON DESERT - EXCEPTION REPORT (first-chance)\n"
+        "Logged when the fault is raised, before the faulting module's own handler\n"
+        "runs. Mods and the game often catch these themselves: it was only a crash\n"
+        "if the game closed at this time. Trinity's own faults are not logged here.\n"
         "================================================================================\n"
         "Timestamp   : %s\n"
         "Mod Version : Trinity v%s\n"

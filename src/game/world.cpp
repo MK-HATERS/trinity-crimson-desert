@@ -488,27 +488,13 @@ namespace trinity::game
         bool ok = true;
 
         uintptr_t funcEntry = 0;
-        const uintptr_t timerMatch = mem::FindPattern(kSig_FrameTimerBody);
+        // The signature starts with the prologue (48 8B C4), so a match is the
+        // function entry - also when another mod already detoured it and the
+        // match came from the on-disk image (live prologue is a jump then).
+        const uintptr_t timerMatch = mem::FindPatternOrHooked(kSig_FrameTimerBody, "world: FrameTimerUpdate");
         if (timerMatch)
         {
-            const uint8_t* b = reinterpret_cast<const uint8_t*>(timerMatch);
-            if (b[0] == 0x48 && b[1] == 0x8B && b[2] == 0xC4)
-            {
-                funcEntry = timerMatch; // Direct function entry
-            }
-            else
-            {
-                // Scan backwards up to 0x100 bytes for function prologue (48 8B C4)
-                for (uintptr_t p = timerMatch - 0x10; p >= timerMatch - 0x100; --p)
-                {
-                    const uint8_t* pb = reinterpret_cast<const uint8_t*>(p);
-                    if (pb[0] == 0x48 && pb[1] == 0x8B && pb[2] == 0xC4)
-                    {
-                        funcEntry = p;
-                        break;
-                    }
-                }
-            }
+            funcEntry = timerMatch;
         }
         else
         {

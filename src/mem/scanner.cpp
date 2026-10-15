@@ -253,6 +253,144 @@ namespace trinity::mem
         return Scan(pattern, mod, maxCount).size();
     }
 
+    namespace
+    {
+        // Scans [data, data+len) for up to 2 hits. Kept free of C++ objects
+        // so the mapped-file reads can sit under SEH (a disk read error on a
+        // mapped view raises EXCEPTION_IN_PAGE_ERROR).
+        int ScanRaw(const uint8_t* data, size_t len, const uint8_t* bytes, const bool* mask,
+                    size_t patLen, size_t* hits)
+        {
+            int count = 0;
+            __try
+            {
+                if (len < patLen) return 0;
+                for (size_t off = 0; off + patLen <= len; ++off)
+                {
+                    size_t i = 0;
+                    while (i < patLen && (!mask[i] || data[off + i] == bytes[i])) ++i;
+                    if (i == patLen)
+                    {
+                        hits[count++] = off;
+                        if (count == 2) break;
+                    }
+                }
+            }
+            __except (EXCEPTION_EXECUTE_HANDLER)
+            {
+                return -1;
+            }
+            return count;
+        }
+
+        // Unique RVA of `pattern` in the on-disk image of the running exe, or 0.
+        uint32_t FindRvaOnDisk(std::string_view pattern, const ModuleRegion& mod)
+        {
+            wchar_t path[MAX_PATH];
+            if (!GetModuleFileNameW(nullptr, path, MAX_PATH)) return 0;
+
+            HANDLE file = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                                      nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+            if (file == INVALID_HANDLE_VALUE) return 0;
+            HANDLE mapping = CreateFileMappingW(file, nullptr, PAGE_READONLY, 0, 0, nullptr);
+            CloseHandle(file);
+            if (!mapping) return 0;
+            const auto* view = static_cast<const uint8_t*>(MapViewOfFile(mapping, FILE_MAP_READ, 0, 0, 0));
+            CloseHandle(mapping);
+            if (!view) return 0;
+
+            const ParsedPattern pat = Parse(pattern);
+            std::vector<uint8_t> maskBytes(pat.mask.begin(), pat.mask.end());
+            uint32_t found = 0;
+            int total = 0;
+
+            const auto* liveNt = reinterpret_cast<const IMAGE_NT_HEADERS*>(
+                mod.base + reinterpret_cast<const IMAGE_DOS_HEADER*>(mod.base)->e_lfanew);
+            const auto* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(view);
+            const auto* nt = reinterpret_cast<const IMAGE_NT_HEADERS*>(view + dos->e_lfanew);
+            // Same build as the running image, or the RVAs mean nothing.
+            if (dos->e_magic == IMAGE_DOS_SIGNATURE && nt->Signature == IMAGE_NT_SIGNATURE &&
+                nt->FileHeader.TimeDateStamp == liveNt->FileHeader.TimeDateStamp &&
+                nt->OptionalHeader.SizeOfImage == liveNt->OptionalHeader.SizeOfImage && !pat.bytes.empty())
+            {
+                const auto* sec = IMAGE_FIRST_SECTION(nt);
+                for (WORD s = 0; s < nt->FileHeader.NumberOfSections && total < 2; ++s, ++sec)
+                {
+                    if (!sec->PointerToRawData || !sec->SizeOfRawData) continue;
+                    size_t len = sec->SizeOfRawData;
+                    if (sec->Misc.VirtualSize && sec->Misc.VirtualSize < len) len = sec->Misc.VirtualSize;
+                    size_t hits[2] = {};
+                    const int n = ScanRaw(view + sec->PointerToRawData, len, pat.bytes.data(),
+                                          reinterpret_cast<const bool*>(maskBytes.data()), pat.bytes.size(), hits);
+                    if (n < 0) { total = 0; break; }
+                    for (int h = 0; h < n && total < 2; ++h, ++total)
+                        found = sec->VirtualAddress + static_cast<uint32_t>(hits[h]);
+                }
+            }
+            UnmapViewOfFile(view);
+            return (total == 1 && found < mod.size) ? found : 0;
+        }
+
+        // Destination of a detour jump at `addr` (jmp rel32, jmp [rip+0] / qword,
+        // mov rax,imm64; jmp rax), or 0.
+        uintptr_t DetourDestination(uintptr_t addr)
+        {
+            const auto* b = reinterpret_cast<const uint8_t*>(addr);
+            if (b[0] == 0xE9)
+                return addr + 5 + *reinterpret_cast<const int32_t*>(b + 1);
+            if (b[0] == 0xFF && b[1] == 0x25)
+                return *reinterpret_cast<const uintptr_t*>(addr + 6 + *reinterpret_cast<const int32_t*>(b + 2));
+            if (b[0] == 0x48 && b[1] == 0xB8 && b[10] == 0xFF && b[11] == 0xE0)
+                return *reinterpret_cast<const uintptr_t*>(b + 2);
+            return 0;
+        }
+
+        uintptr_t SafeDetourDestination(uintptr_t addr)
+        {
+            __try { return DetourDestination(addr); }
+            __except (EXCEPTION_EXECUTE_HANDLER) { return 0; }
+        }
+    }
+
+    uintptr_t FindPatternOrHooked(std::string_view pattern, const char* context)
+    {
+        if (const uintptr_t live = FindPattern(pattern))
+            return live;
+
+        const ModuleRegion& mod = GameModule();
+        if (!mod) return 0;
+        const uint32_t rva = FindRvaOnDisk(pattern, mod);
+        if (!rva) return 0;
+        const uintptr_t addr = mod.base + rva;
+
+        // Follow up to a few chained jumps to name the mod that hooked it
+        // (MinHook-style detours land in a relay page first, then the mod).
+        char owner[MAX_PATH] = "unknown module";
+        uintptr_t dest = addr;
+        for (int hop = 0; hop < 4; ++hop)
+        {
+            dest = SafeDetourDestination(dest);
+            if (!dest) break;
+            HMODULE m = nullptr;
+            if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+                                   GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                                   reinterpret_cast<LPCSTR>(dest), &m) && m)
+            {
+                char p[MAX_PATH];
+                if (GetModuleFileNameA(m, p, MAX_PATH))
+                {
+                    const char* name = strrchr(p, '\\');
+                    lstrcpynA(owner, name ? name + 1 : p, MAX_PATH);
+                }
+                break;
+            }
+        }
+
+        LOG_WARN("%s: live bytes were patched (hooked by %s); resolved from the on-disk exe @ %p - chaining.",
+                 context, owner, reinterpret_cast<void*>(addr));
+        return addr;
+    }
+
     void LogModuleLayout()
     {
         const ModuleRegion& mod = GameModule();

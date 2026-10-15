@@ -55,6 +55,16 @@ namespace trinity::mem
         return FindPatternIf(pattern, GameModule(), visit, ctx);
     }
 
+    // Like FindPattern on the game module, but when the live scan misses it
+    // falls back to the unmodified CrimsonDesert.exe on disk. Another ASI that
+    // already detoured the function has overwritten its first bytes with a
+    // jump, so the prologue signature no longer matches in memory even though
+    // the function is still there. The disk hit must be unique; it is returned
+    // as a live address (module base + RVA) and the hooking module, if one can
+    // be identified from the jump, is logged under `context`. MinHook can hook
+    // on top of such a jump, which chains both mods' detours.
+    uintptr_t FindPatternOrHooked(std::string_view pattern, const char* context);
+
     // Log a one-line summary of the module's committed regions (base, size,
     // number of readable/executable pages). Diagnostic aid.
     void LogModuleLayout();

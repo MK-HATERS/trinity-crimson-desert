@@ -1,4 +1,4 @@
-# Fork additions — Trinity 1.5.0 (Crimson Desert 2.03.02, PE 1.0.0.2976)
+# Fork additions — Trinity 1.5.1 (Crimson Desert 2.03.02, PE 1.0.0.2976)
 
 This fork of Trinity (MIT, by XeTrinityz, vTweak maintenance by Lian) adds mounts and pets, NPC spawning
 with sides, Ghost Mode, journal knowledge and elemental magic unlocks, combat options and a set of crash and
@@ -12,6 +12,38 @@ game yet — report problems in the issues.
 2. Copy `Trinity.asi` and the `languages` folder from the release zip into `bin64` (the folder with
    `CrimsonDesert.exe`). Close the game before replacing the ASI.
 3. Launch, load a save, press **Insert** (keyboard) or **LB + D-pad Down** (controller).
+
+## 1.5.1 — works alongside other ASI mods
+
+**Fixed: Inventory, Teleport, Game Speed and most queued features did nothing when other ASI mods were
+installed.** ASI loaders load mods alphabetically, so Trinity usually loads last. Mods that hook the same game
+functions first (for example KliffWings and DesertLinkDyeStudio) overwrite the start of those functions with a
+jump, so Trinity's byte signatures no longer matched in memory. `Trinity.log` showed:
+
+```text
+teleport: movement-update signature NOT FOUND - position tracking disabled.
+inventory: holder resolver signature NOT FOUND - inventory disabled.
+world: FrameTimerUpdate signature not found - Game Speed disabled.
+```
+
+The movement-update and frame-timer hooks also drive the per-frame work for Player, Inventory, Dye,
+Equipment, Skills, Mounts & Pets and Ghost Mode, so losing them broke far more than the three features named.
+
+When a signature misses in memory, Trinity now looks it up in the unmodified `CrimsonDesert.exe` on disk
+(same build only, unique match required), hooks the live function on top of the other mod's detour, and both
+mods run. The log names the mod that got there first:
+
+```text
+teleport: movement-update: live bytes were patched (hooked by KliffWings.asi); resolved from the on-disk exe @ ... - chaining.
+```
+
+**Changed: `Trinity_Crash.txt` no longer reports other mods' handled errors as crashes.** The exception logger
+sees every fault in the process before the faulting module's own handler runs, so a mod that catches its own
+errors (CrimsonInvEditor does every 5 seconds) filled the file with false "crash reports". Entries are now
+labelled first-chance exceptions with the module named; it was only a crash if the game closed at that time.
+
+If two mods offer the same feature (inventory editing, dyes, damage numbers, teleport), both now run. If one
+misbehaves, disable the duplicate first.
 
 ## New in 1.5.0
 
