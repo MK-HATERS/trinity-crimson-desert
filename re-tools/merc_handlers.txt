@@ -1,0 +1,85 @@
+===== TrocTrHireMercenaryFromInventoryReq {'vtable': '0x145b22978', 'obj': '0x146a7b8a0', 'init': '0x140228645', 'handle': '0x142a339d0'}
+   0x142a33a73: mov r8d, 2
+   0x142a33ac1: mov r8d, 2
+   0x142a33b3b: call 0x142ba1590
+   0x142a33b6c: call 0x1414276d0
+   0x142a33b7b: call 0x141427c10
+   0x142a33b8b: call 0x1414276d0
+   0x142a33b9a: call 0x141427c10
+   0x142a33bdb: call 0x142773630
+   0x142a33c88: call 0x14143b450
+   0x142a33cab: call 0x14143b670
+===== TrocTrHireMercenaryToTargetReq {'vtable': '0x145b22a78', 'obj': '0x146a7aa90', 'init': '0x140227e75', 'handle': '0x142a2f160'}
+   0x142a2f205: mov r8d, 4
+   0x142a2f253: mov r8d, 1
+   0x142a2f2e0: call 0x142badc00
+   0x142a2f315: call 0x1414276d0
+   0x142a2f324: call 0x141427c10
+   0x142a2f334: call 0x1414276d0
+   0x142a2f343: call 0x141427c10
+   0x142a2f384: call 0x142773630
+   0x142a2f42e: call 0x14143b450
+   0x142a2f451: call 0x14143b670
+===== TrocTrFireMercenaryReq {'vtable': '0x145b22b38', 'obj': '0x146a7b4b0', 'init': '0x140228415', 'handle': '0x142a32250'}
+   0x142a322ed: mov r8d, 8
+   0x142a3233f: call 0x142c49a50
+   0x142a323e8: call 0x14143b450
+   0x142a3240b: call 0x14143b670
+===== TrocTrDisbandMercenaryReq {'vtable': '0x145b228b8', 'obj': '0x146a7b780', 'init': '0x1402285a5', 'handle': '0x142a33000'}
+   0x142a3301d: call 0x1448962c0
+   0x142a330c6: mov r8d, 1
+   0x142a33130: call 0x140392380
+   0x142a33170: call 0x144898e24
+   0x142a331a0: mov r8d, 4
+   0x142a33251: call 0x142ba10a0
+   0x142a33298: call 0x142a2ca00
+   0x142a332da: mov r8d, 0x1fd
+   0x142a332e7: call 0x1447f03bc
+   0x142a332f1: call 0x1447f02bc
+   0x142a33385: call 0x14143b450
+   0x142a333a8: call 0x14143b670
+===== TrocTrRequestSwitchMercenarySummonStateReq {'vtable': '0x145b229b8', 'obj': '0x146a7aa00', 'init': '0x140227e25', 'handle': '0x142a2ef60'}
+   0x142a2eff5: mov r8d, 8
+   0x142a2f03f: mov r8d, 1
+   0x142a2f116: call 0x14143b450
+   0x142a2f139: call 0x14143b670
+===== TrocTrSelectMercenarySpawnReq {'vtable': '0x145b22c78', 'obj': '0x146a7af10', 'init': '0x1402280f5', 'handle': '0x142a306a0'}
+   0x142a30755: mov r8d, 8
+   0x142a30796: mov r8d, 0xc
+   0x142a307d8: call 0x142c49670
+   0x142a30896: call 0x14143b450
+   0x142a308b9: call 0x14143b670
+===== TrocTrChangeMercenaryNameReq {'vtable': '0x145b22a38', 'obj': '0x146a7abb0', 'init': '0x140227f15', 'handle': '0x142a2f710'}
+   0x142a2f7ae: mov r8d, 8
+   0x142a2f80d: mov r8d, 4
+   0x142a2f92d: call 0x142ba5330
+   0x142a2f95c: call 0x1414276d0
+   0x142a2f96b: call 0x141427c10
+   0x142a2f97b: call 0x1414276d0
+   0x142a2f98a: call 0x141427c10
+   0x142a2f9c9: call 0x142773630
+   0x142a2fa8e: call 0x14143b450
+   0x142a2fab1: call 0x14143b670
+===== TrocTrFrameEventRegistMercenaryReq {'vtable': '0x145b228f8', 'obj': '0x146a7b660', 'init': '0x140228505', 'handle': '0x142a32b50'}
+   0x142a32c16: call 0x141f78f20
+   0x142a32c57: mov r8d, 0xc
+   0x142a32c84: mov r8d, 4
+   0x142a32cda: call 0x142c49ea0
+   0x142a32db9: call 0x14143b450
+   0x142a32ddc: call 0x14143b670
+===== TrocTrAddHyosiMercenaryReq {'vtable': '0x145b22c38', 'obj': '0x146a7b030', 'init': '0x140228195', 'handle': '0x142a30bb0'}
+   0x142a30c53: mov r8d, 8
+   0x142a30ce4: call 0x142b93060
+   0x142a30d15: call 0x1414276d0
+   0x142a30d24: call 0x141427c10
+   0x142a30d34: call 0x1414276d0
+   0x142a30d43: call 0x141427c10
+   0x142a30d84: call 0x142773630
+   0x142a30e1c: call 0x14143b450
+   0x142a30e3f: call 0x14143b670
+===== TrocTrAcquireKnowledgeReq {'vtable': '0x145b227b8', 'obj': '0x146a79b60', 'init': '0x140227605', 'handle': '0x142a19a00'}
+===== TrocTrResetSkillsIfPossibleReq {'vtable': '0x145b22738', 'obj': '0x146a79f50', 'init': '0x140227835', 'handle': '0x142a1b120'}
+   0x142a1b1bd: mov r8d, 1
+   0x142a1b21c: call 0x142c47c10
+   0x142a1b2b0: call 0x14143b450
+   0x142a1b2d3: call 0x14143b670

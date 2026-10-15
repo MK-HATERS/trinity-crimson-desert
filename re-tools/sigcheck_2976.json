@@ -1,0 +1,957 @@
+[
+ {
+  "file": "game/dye.cpp",
+  "line": 102,
+  "name": "",
+  "hits": 2,
+  "va": [
+   "0x140bc831c",
+   "0x140be901c"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 148,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14c7efde0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 153,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 175,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1417ae080"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 177,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1417ae080"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 183,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1408738b0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 199,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1408738de"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 210,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 212,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 266,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14282f417"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 268,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142b010cd"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 270,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142afff78"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 272,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142b02ea0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 274,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142795792"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 276,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142825ab4"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 278,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14282e757"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 280,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1428353b1"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 282,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14282f41b"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 284,
+  "name": "",
+  "hits": 2,
+  "va": [
+   "0x14036190b",
+   "0x1406d70a9"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 286,
+  "name": "",
+  "hits": 6,
+  "va": [
+   "0x14036191b",
+   "0x140364d5d",
+   "0x1406510d8"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 291,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14036190b"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 295,
+  "name": "kSig_GameCoreGlobal_TU201",
+  "hits": 2,
+  "va": [
+   "0x14036190b",
+   "0x1406d70a9"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 444,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1436a3850"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 450,
+  "name": "",
+  "hits": 4,
+  "va": [
+   "0x1425ea64e",
+   "0x14280010a",
+   "0x142b8d386"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 463,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140655125"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 468,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 474,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 479,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 561,
+  "name": "kSig_LeaR8Rip",
+  "hits": 7,
+  "va": [
+   "0x1400093be",
+   "0x140009c01",
+   "0x14007597b"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 563,
+  "name": "",
+  "hits": 7,
+  "va": [
+   "0x140388f30",
+   "0x1404303b0",
+   "0x140473f20"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 588,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140defc7e"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 593,
+  "name": "",
+  "hits": 5,
+  "va": [
+   "0x140aa4f15",
+   "0x14179a7bd",
+   "0x1417fa8f3"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 600,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140decaf0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 602,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140decb67"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 606,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140df9da5"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 612,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x143836de8"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 618,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14078ef76"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 641,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 643,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1436a9b9b"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 653,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 655,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 676,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1417f8df0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 681,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14212a150"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 730,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1421358b5"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 733,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 741,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1438e9d10"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 790,
+  "name": "",
+  "hits": 6,
+  "va": [
+   "0x140734dda",
+   "0x1408ca7cf",
+   "0x1409dc2af"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 795,
+  "name": "",
+  "hits": 6,
+  "va": [
+   "0x140734dda",
+   "0x1408ca7cf",
+   "0x1409dc2af"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 834,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142b699d0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1025,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142409985"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1031,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1041,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142130d70"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1059,
+  "name": "",
+  "hits": 6,
+  "va": [
+   "0x14038f284",
+   "0x1403988fd",
+   "0x14040e900"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1186,
+  "name": "kSig_MovR8Rip",
+  "hits": 7,
+  "va": [
+   "0x140144c16",
+   "0x140216c56",
+   "0x140216cf6"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1310,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1425d76c0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1321,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1371,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1374,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1377,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1409,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140ad1300"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1414,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1440,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1420e5614"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1473,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140a384a0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1479,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140a384bc"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1524,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x143dc3a10"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1527,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x143dc3ac0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1530,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x143dc3b70"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1534,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x143dbcd20"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1539,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1552,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1554,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1684,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142c17ab0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1688,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142c17ab0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1716,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142c10400"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1719,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1725,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1409911f0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1730,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142ba5d9b"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1746,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14240ea60"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1750,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14240e770"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1794,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1803,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1409933a0"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1807,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1817,
+  "name": "",
+  "hits": 2,
+  "va": [
+   "0x1409a1b41",
+   "0x1446123a1"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1831,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1833,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1908,
+  "name": "",
+  "hits": 6,
+  "va": [
+   "0x14035e404",
+   "0x14035f9d4",
+   "0x1403d2b04"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1926,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x140f04300"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 1930,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 2013,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x141ecb978"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 2020,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 2035,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x141ecb810"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 2038,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14dbb7750"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 2043,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 2047,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 2051,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x142b7c760"
+  ]
+ },
+ {
+  "file": "game/offsets.h",
+  "line": 2056,
+  "name": "",
+  "hits": 0,
+  "va": []
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1530,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14209be24"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1534,
+  "name": "",
+  "hits": 5,
+  "va": [
+   "0x140f0849c",
+   "0x141ed0f2c",
+   "0x141f24883"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1537,
+  "name": "",
+  "hits": 7,
+  "va": [
+   "0x1408a6a18",
+   "0x141f24a9c",
+   "0x141f24c30"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1650,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14209a4b0"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1660,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14209be36"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1665,
+  "name": "",
+  "hits": 5,
+  "va": [
+   "0x14209c91e",
+   "0x1421a0ba5",
+   "0x1428e54bf"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1668,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x14209c7de"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1676,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x141f2a832"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1717,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1417ae0cf"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1728,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1417ae139"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1739,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1417ac230"
+  ]
+ },
+ {
+  "file": "game/player.cpp",
+  "line": 1740,
+  "name": "",
+  "hits": 1,
+  "va": [
+   "0x1417ac2a3"
+  ]
+ },
+ {
+  "file": "mem/scanner.h",
+  "line": 25,
+  "name": "",
+  "hits": 7,
+  "va": [
+   "0x140073f25",
+   "0x140073f8d",
+   "0x1400741c9"
+  ]
+ }
+]

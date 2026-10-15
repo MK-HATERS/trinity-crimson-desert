@@ -1,0 +1,245 @@
+#pragma once
+
+#include <vector>
+
+namespace trinity
+{
+    // Sentinel bits (outside the real XInput wButtons range) that let the two
+    // analog triggers act as held "buttons" in a pad mask - used by the Free
+    // Flight binds (flyUpPadMask / flyDownPadMask) and shared between the
+    // movement hook that polls them (teleport.cpp) and the Keybinds submenu
+    // that captures them (framework.cpp / menu.cpp), so both agree on what
+    // "trigger held" means.
+    constexpr unsigned int kPadLTrigger = 0x10000u; // Left Trigger
+    constexpr unsigned int kPadRTrigger = 0x20000u; // Right Trigger
+
+    // Shared runtime state, accessed from the render thread (menu) and the
+    // window thread (input). Simple scalars only - no locking needed for
+    // these plain toggles.
+    struct State
+    {
+        bool menuOpen = false;
+
+        // True while a ui::Search row is capturing typed text. The window
+        // hook swallows ALL keyboard input from the game while this is set,
+        // so typing a search never moves the player.
+        bool textCapture = false;
+
+        // Menu open/close binding (framework.cpp PollMenuToggle /
+        // PollToggleCombo), rebindable from the SYSTEM tab's Keybinds submenu
+        // and persisted in Trinity.ini. openKeyVk is a Win32 virtual-key code
+        // (default VK_INSERT); openPadMask is an XInput button mask that must
+        // be held in full - a single button or a combo (default LB + D-Pad
+        // Down).
+        int          openKeyVk  = 0x2D;          // VK_INSERT
+        unsigned int openPadMask = 0x0100 | 0x0002; // LB | DPAD_DOWN
+
+        // Transient: a Keybinds-submenu row is listening for the next key /
+        // button to bind. While set the window hook swallows all keyboard
+        // input, the menu suspends navigation, and the open toggle is ignored,
+        // so the press being captured neither moves the player nor navigates
+        // nor closes the menu. Never persisted.
+        bool rebindCapture = false;
+
+        // Player stat & combat features (player.cpp).
+
+        bool godMode         = false;
+        bool oneHitKill      = false;
+        bool infDurability   = false;
+        bool noFallDamage    = true;
+        bool infStamina      = false;
+        bool infMountStamina = false;
+        bool infSpirit       = false;
+        bool easyParry       = false;
+        bool easyEvade       = false;
+        bool noBounty        = false;
+        bool superGlideCompat = true;  // Auto-bypass stat-commit hook if SuperGlide.asi is present
+        bool bypassStatCommit = false; // Manual force-bypass for stat-commit hook
+
+        // Battle-damage multipliers (player.cpp). Applied to the signed HP
+        // delta at the damage-apply dispatcher; 1.0 = game behavior.
+        float dmgOutMult = 1.0f; // player -> enemy
+        float dmgInMult  = 1.0f; // enemy  -> player
+
+        // Max health multiplier for the party (0 = game, 1 = 2x, 2 = 5x, 3 = 10x)
+        // and stamina use (0 = game, 1 = 50%, 2 = 20%, 3 = 10%). player.cpp.
+        int  maxHpMode       = 0;
+        int  staminaUseMode  = 0;
+        // Floating damage numbers drawn by the overlay (dealt yellow, taken red).
+        bool damageNumbers   = false;
+        // Hostile NPCs cannot detect, target or stay aggroed on the player
+        // (ghost.cpp, DesertLink's GhostModule port).
+        bool ghostMode       = false;
+        // Item use limits from ItemInfo (inventory.cpp): cooldowns capped to 1 s,
+        // multi-charge items refilled to 99 charges. Session tables, restored off.
+        bool shortItemCooldowns = false;
+        bool maxItemCharges     = false;
+
+        // Movement features (teleport.cpp hkMoveUpdate). Scale the character
+        // physics proxy's desired-velocity vector each movement tick: Super Run
+        // multiplies horizontal speed, Super Jump multiplies upward (rising)
+        // velocity so jumps/launches go higher. 1.0x = game behavior.
+        bool  superRun      = false;
+        float superRunMult  = 2.0f;
+        bool  superJump     = false;
+        float superJumpMult = 2.0f;
+
+        // Free Flight (teleport.cpp hkLocoStep). Turns the crow-wing glide -
+        // which only ever sinks - into vertical control. While enabled and
+        // airborne, HOLD the ascend key to rise or the descend key to sink at
+        // flightSpeed units/tick; release and normal physics resume, so jumps
+        // and aerial attacks are untouched (no hover clamp). The keys are Win32
+        // virtual-key codes; defaults Caps Lock (up) and Ctrl (down). Rebindable
+        // (with openKeyVk/openPadMask) from the SYSTEM tab's Keybinds submenu
+        // and persisted in Trinity.ini regardless of Auto Save.
+        bool  freeFlight   = false;
+        float flightSpeed  = 8.0f;
+        int   flyUpKeyVk   = 0x14; // VK_CAPITAL (Caps Lock)
+        int   flyDownKeyVk = 0x11; // VK_CONTROL (Ctrl)
+        // Controller equivalents - XInput button masks that must be held in
+        // full (same model as openPadMask). kPadLTrigger/kPadRTrigger (above)
+        // stand in for the analog triggers, which aren't wButtons bits.
+        // Defaults: RB rises, Right Trigger sinks. 0 disables that direction
+        // on the pad. (RB = XINPUT_GAMEPAD_RIGHT_SHOULDER = 0x0200; 0x0008
+        // would be D-Pad Right.)
+        unsigned int flyUpPadMask   = 0x0200;  // Right Shoulder (RB)
+        unsigned int flyDownPadMask = 0x20000; // Right Trigger (RT)
+
+        // Map Marker Teleport (teleport.cpp). Teleports to the custom waypoint
+        // placed on the world map. Rebindable from the Keybinds submenu (default
+        // F10 key) and persisted in Trinity.ini. Fallback height is used when the
+        // marker has no elevation (sky insertion).
+        int          markerTeleportKeyVk  = 0x79;  // VK_F10
+        unsigned int markerTeleportPadMask = 0;    // Disabled on pad by default
+        int          tameKeyVk            = 0x78;  // VK_F9 - Tame Nearest Mount
+        unsigned int tamePadMask          = 0;
+        float        markerFallbackHeight = 1200.0f;
+
+        // Menu Navigation bindings (framework.cpp)
+        // Controller button masks (XInput):
+        unsigned int navSelectPadMask   = 0x1000;  // XINPUT_GAMEPAD_A (A / Cross)
+        unsigned int navBackPadMask     = 0x2000;  // XINPUT_GAMEPAD_B (B / Circle)
+        unsigned int navClearPadMask    = 0x4000;  // XINPUT_GAMEPAD_X (X / Square)
+        unsigned int navPrevTabPadMask  = 0x0100;  // XINPUT_GAMEPAD_LEFT_SHOULDER (LB)
+        unsigned int navNextTabPadMask  = 0x0200;  // XINPUT_GAMEPAD_RIGHT_SHOULDER (RB)
+        unsigned int navUpPadMask       = 0x0001;  // XINPUT_GAMEPAD_DPAD_UP
+        unsigned int navDownPadMask     = 0x0002;  // XINPUT_GAMEPAD_DPAD_DOWN
+        unsigned int navLeftPadMask     = 0x0004;  // XINPUT_GAMEPAD_DPAD_LEFT
+        unsigned int navRightPadMask    = 0x0008;  // XINPUT_GAMEPAD_DPAD_RIGHT
+
+        // Keyboard virtual keys (Win32 VK):
+        int navSelectKeyVk  = 0x0D; // VK_RETURN (Enter)
+        int navBackKeyVk    = 0x08; // VK_BACK (Backspace)
+        int navClearKeyVk   = 0x2E; // VK_DELETE (Delete)
+        int navPrevTabKeyVk = 0x51; // 'Q'
+        int navNextTabKeyVk = 0x45; // 'E'
+        int navUpKeyVk      = 0x26; // VK_UP
+        int navDownKeyVk    = 0x28; // VK_DOWN
+        int navLeftKeyVk    = 0x25; // VK_LEFT
+        int navRightKeyVk   = 0x27; // VK_RIGHT
+
+        // Trust Multiplier (friendly.cpp). Scales the trust ("Friendly")
+        // GAINED when gifting NPCs or feeding/taming animals, at the friendly-
+        // apply funnel. Only real interactions are scaled (save-load is not);
+        // the value still caps at the game's max (100), so a high multiplier
+        // just reaches max / tames in fewer gifts. 1.0x = game behavior.
+        bool  trustMult    = false;
+        float trustMultVal = 3.0f;
+
+        // Mount & Pet Options (menu.cpp). Controls Pet registration capacity
+        // and pet hire limit up to 999 slots.
+        bool  petSlotLimit    = false;
+        int   petSlotLimitVal = 30;
+
+
+        // World features (world.cpp). Game Speed forces the engine's fixed
+        // frame-timestep so the whole simulation runs at gameSpeedMult of the
+        // 60-FPS-equivalent rate; the toggle off restores the engine's own
+        // real-time delta.
+        bool  gameSpeed     = false;
+        float gameSpeedMult = 1.0f;
+
+        // Time of Day (world.cpp). Freeze holds BOTH the numeric clock (via the
+        // field-time tick hook, delta 0) AND the visible sun (via the render
+        // manager's lower==upper clamp) while set, with the rest of the sim
+        // untouched - the sun needs its own layer or it keeps moving.
+        // Advance is a one-shot action (menu.cpp), not persisted state.
+        bool  timeFrozen = false;
+
+        // Weather & Atmosphere controls (world.cpp)
+        bool  forceClearSky    = false;
+        float rainIntensity    = 0.0f;  // 0.00 .. 1.00
+        float snowIntensity    = 0.0f;  // 0.00 .. 1.00
+        float dustIntensity    = 0.0f;  // 0.00 .. 1.00
+        float windMultiplier   = 1.0f;  // 0.00 .. 5.00
+        float windGust         = 1.0f;  // 0.00 .. 3.00
+        float windTurbLift     = 1.0f;  // 0.00 .. 3.00
+        bool  noWind           = false;
+
+        float cloudThick       = 1.0f;  // 0.00 .. 2.00
+        float cloudTop         = 1.0f;  // 0.00 .. 2.00
+        float cloudBase        = 1.0f;  // 0.00 .. 2.00
+        float cloudScrollSpeed = 1.0f;  // 0.00 .. 5.00
+
+        float fogA             = 1.0f;  // 0.00 .. 2.00
+        float fogB             = 1.0f;  // 0.00 .. 2.00
+        bool  clearDistantFog  = false;
+
+        int   weatherPreset    = 0;     // 0=Dynamic, 1=Clear, 2=Overcast, 3=Rain, 4=Storm, 5=Fog
+
+        // Inventory-wide overrides (inventory.cpp). Unlike the quantity editor
+        // these write into the game's own ItemInfo / InventoryInfo data
+        // tables - one number re-stamps every item / storage type at once,
+        // and turning the toggle back off restores each row's own original
+        // value.
+        bool invSlotSize     = false;
+        int  invSlotSizeVal  = 700; // 700 is the engine's safe limit (prevents Error 298648703)
+        bool invStackSize    = false;
+        int  invStackSizeVal = 999999;
+
+        // UI Theme: 0=Crimson Red, 1=Cyber Cyan, 2=Neon Purple, 3=Matrix Emerald, 4=Royal Gold, 5=Sunset Orange
+        int themeIndex = 0;
+        bool playstationIcons = false;
+
+        // UI Language: "en" (default), "zh", "ko", or any custom code matching Trinity_<code.ini
+        char languageCode[16] = "en";
+        int  languageIndex = 0;
+
+        // Custom Title Font (Settings UI)
+        bool useCustomFont = true;
+        int  builtInFontIndex = 0;
+        char customFont[64] = "Kirsty Bd.otf";
+
+        // Bookmark / Saved Locations (dynamic unlimited list)
+        struct SavedLocation
+        {
+            char  name[64] = "";
+            float x = 0.0f;
+            float y = 0.0f;
+            float z = 0.0f;
+        };
+        std::vector<SavedLocation> savedLocations;
+
+        // Overlay extras.
+        bool showFps = false;
+        bool showConsole = true;
+        bool fileLogging = true; // mirror the console to Trinity.log
+        bool perfLogging = false; // opt-in subsystem timing diagnostics
+
+        // UI customizations
+        float menuScale = 1.0f;
+        float tooltipImageScale = 1.0f;
+        bool  showItemTooltip = true;
+
+        // Persistence (settings.cpp). While on, every feature change is
+        // written to Trinity.ini and restored on the next launch. The flag
+        // itself always persists so the preference survives sessions.
+        bool autoSave = true;
+
+        static State& Get()
+        {
+            static State s;
+            return s;
+        }
+    };
+}
