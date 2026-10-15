@@ -1,4 +1,4 @@
-# Fork additions — Trinity 1.5.1 (Crimson Desert 2.03.02, PE 1.0.0.2976)
+# Fork additions — Trinity 1.5.2 (Crimson Desert 2.03.02, PE 1.0.0.2976)
 
 This fork of Trinity (MIT, by XeTrinityz, vTweak maintenance by Lian) adds mounts and pets, NPC spawning
 with sides, Ghost Mode, journal knowledge and elemental magic unlocks, combat options and a set of crash and
@@ -12,6 +12,19 @@ game yet — report problems in the issues.
 2. Copy `Trinity.asi` and the `languages` folder from the release zip into `bin64` (the folder with
    `CrimsonDesert.exe`). Close the game before replacing the ASI.
 3. Launch, load a save, press **Insert** (keyboard) or **LB + D-pad Down** (controller).
+
+## 1.5.2 — modifier hotkeys, weather mods
+
+**New: Ctrl / Shift / Alt hotkeys.** The Menu, Marker Teleport and Tame Nearest Mount keys can be bound to a
+combination such as **Ctrl+F9**: in SYSTEM → Keybinds, select the row, hold the modifier and press the key. A
+bind fires only with exactly its modifiers, so plain F9 can be left to another mod (KliffWings opens on F9,
+CalmerDynamicWind toggles on F10). Fly and menu-navigation keys stay single keys, because Ctrl is Fly Down.
+In `Trinity.ini` a modifier adds to the key code: Ctrl +256, Shift +512, Alt +1024 (Ctrl+F9 = `376`).
+
+**Fixed: CalmerDynamicWind did nothing with Trinity installed.** Trinity hooked the rain, snow, dust and wind
+functions at startup even when its weather options were never used; CalmerDynamicWind refuses to hook a
+function another mod already holds, so it installed nothing. Those four hooks are now installed only the first
+time a weather option leaves its default.
 
 ## 1.5.1 — works alongside other ASI mods
 

@@ -377,6 +377,37 @@ namespace trinity::game
             }
         }
 
+        // True once any option read by the weather detours above is non-default.
+        bool WeatherHooksNeeded(const State& st)
+        {
+            return st.forceClearSky || st.noWind || st.clearDistantFog || st.weatherPreset != 0 ||
+                   st.rainIntensity > 0.001f || st.snowIntensity > 0.001f || st.dustIntensity > 0.001f ||
+                   st.windMultiplier != 1.0f || st.cloudScrollSpeed != 1.0f ||
+                   st.cloudThick != 1.0f || st.cloudTop != 1.0f || st.cloudBase != 1.0f ||
+                   st.fogA != 1.0f || st.fogB != 1.0f;
+        }
+
+        void InstallWeatherHooks()
+        {
+            mem::InstallHook("world: rain intensity", kSig_WeatherRain,
+                             "Rain control disabled", hkGetRainIntensity,
+                             &oGetRainIntensity, &g_rainIntensityTarget);
+            mem::InstallHook("world: snow intensity", kSig_WeatherSnow,
+                             "Snow control disabled", hkGetSnowIntensity,
+                             &oGetSnowIntensity, &g_snowIntensityTarget);
+            mem::InstallHook("world: dust intensity", kSig_WeatherDust,
+                             "Dust control disabled", hkGetDustIntensity,
+                             &oGetDustIntensity, &g_dustIntensityTarget);
+            if (!mem::InstallHook("world: wind pack", kSig_WindPack, "",
+                                  hkWindPack, &oWindPack, &g_windPackTarget))
+            {
+                mem::InstallHook("world: wind pack (legacy)", kSig_WindPack_Legacy,
+                                 "Cloud and Fog control disabled", hkWindPack,
+                                 &oWindPack, &g_windPackTarget);
+            }
+            LOG("world: weather hooks installed (a weather option was changed).");
+        }
+
         // --- Safe Weather & Atmosphere discovery (Non-hooking field controller) ---
         static uintptr_t g_pEnvManager = 0;
         static uint32_t  g_envSlot     = 0x60;   // read from kSig_EnvManager
@@ -586,23 +617,12 @@ namespace trinity::game
             }
         }
 
-        // Dynamic weather intensity hooks (Rain, Snow, Dust)
-        mem::InstallHook("world: rain intensity", kSig_WeatherRain,
-                         "Rain control disabled", hkGetRainIntensity,
-                         &oGetRainIntensity, &g_rainIntensityTarget);
-        mem::InstallHook("world: snow intensity", kSig_WeatherSnow,
-                         "Snow control disabled", hkGetSnowIntensity,
-                         &oGetSnowIntensity, &g_snowIntensityTarget);
-        mem::InstallHook("world: dust intensity", kSig_WeatherDust,
-                         "Dust control disabled", hkGetDustIntensity,
-                         &oGetDustIntensity, &g_dustIntensityTarget);
-        if (!mem::InstallHook("world: wind pack", kSig_WindPack, "",
-                              hkWindPack, &oWindPack, &g_windPackTarget))
-        {
-            mem::InstallHook("world: wind pack (legacy)", kSig_WindPack_Legacy,
-                             "Cloud and Fog control disabled", hkWindPack,
-                             &oWindPack, &g_windPackTarget);
-        }
+        // Rain / snow / dust / wind-pack hooks are installed by World::Tick
+        // the first time a weather option leaves its default. Weather mods
+        // (CalmerDynamicWind) refuse to hook a function another mod already
+        // detoured, so holding them at startup disabled those mods even for
+        // players who never touch Trinity's weather.
+        LOG("world: weather hooks deferred until a weather option is changed.");
 
         // Safe EnvManager pointer resolution for Atmosphere & Weather (Zero hooks)
         {
@@ -633,6 +653,14 @@ namespace trinity::game
     void World::Tick()
     {
         const State& st = State::Get();
+
+        // Game thread only, so a plain static suffices.
+        static bool s_weatherHooks = false;
+        if (!s_weatherHooks && WeatherHooksNeeded(st))
+        {
+            s_weatherHooks = true;
+            InstallWeatherHooks();
+        }
 
         // Upkeep No Bounty state (apply once Player is in world, and refresh across map loads)
         static int s_lastNoBounty = -1;

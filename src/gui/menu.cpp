@@ -10,6 +10,7 @@
 
 #include "framework.h"
 #include "widgets.h"
+#include "../core/hotkey.h"
 #include "../core/settings.h"
 #include "../core/state.h"
 #include "../core/text.h"
@@ -3774,7 +3775,24 @@ namespace trinity::gui
     // Human-readable name for a Win32 virtual-key code (rebind row display).
     // The named cases cover keys GetKeyNameText renders poorly (or needs the
     // extended-key bit for); the fallback handles letters/digits/F-keys.
-    static const char* KeyName(int vk)
+    static const char* BaseKeyName(int vk);
+
+    // Bind name including its modifiers ("Ctrl+F9"); see core/hotkey.h.
+    static const char* KeyName(int bind)
+    {
+        const int mods = bind & hotkey::kModMask;
+        if (!mods)
+            return BaseKeyName(bind & hotkey::kVkMask);
+        static char combo[64];
+        snprintf(combo, sizeof(combo), "%s%s%s%s",
+                 (mods & hotkey::kCtrl)  ? "Ctrl+"  : "",
+                 (mods & hotkey::kShift) ? "Shift+" : "",
+                 (mods & hotkey::kAlt)   ? "Alt+"   : "",
+                 BaseKeyName(bind & hotkey::kVkMask));
+        return combo;
+    }
+
+    static const char* BaseKeyName(int vk)
     {
         switch (vk)
         {
@@ -3838,10 +3856,10 @@ namespace trinity::gui
 
     // Lowest virtual-key currently held (mouse buttons 0x01-0x06 skipped),
     // or 0 if none. Used to detect the key the user wants to bind.
-    static int FirstKeyDown()
+    static int FirstKeyDown(bool skipModifiers = false)
     {
         for (int vk = 0x08; vk <= 0xFE; ++vk)
-            if (GetAsyncKeyState(vk) & 0x8000)
+            if ((GetAsyncKeyState(vk) & 0x8000) && !(skipModifiers && hotkey::IsModifierVk(vk)))
                 return vk;
         return 0;
     }
@@ -3891,7 +3909,10 @@ namespace trinity::gui
         // While listening, the description spells out how to finish; otherwise
         // it's the action's own explanation.
         const char* rowDesc = desc;
-        if      (capKey) rowDesc = LOC("Press the key you want to bind, or Esc to cancel.");
+        const bool modsOk = keyTarget == BindTarget::MenuKey || keyTarget == BindTarget::MarkerKey ||
+                            keyTarget == BindTarget::TameKey;
+        if      (capKey && modsOk) rowDesc = LOC("Press the key you want to bind (hold Ctrl, Shift or Alt with it for a combo), or Esc to cancel.");
+        else if (capKey) rowDesc = LOC("Press the key you want to bind, or Esc to cancel.");
         else if (capPad) rowDesc = LOC("Press the button or combo you want to bind, or Esc to cancel.");
 
         const int capCol = capKey ? 0 : capPad ? 1 : -1;
@@ -3990,6 +4011,12 @@ namespace trinity::gui
         const bool timedOut = GetTickCount64() - startMs > 6000; // never soft-lock
         const bool escDown  = (GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
 
+        // The global hotkeys accept Ctrl/Shift/Alt + key (hotkey.h); fly and
+        // menu-navigation keys stay single keys (Ctrl is Fly Down by default).
+        const bool modsOk = s_capTarget == BindTarget::MenuKey ||
+                            s_capTarget == BindTarget::MarkerKey ||
+                            s_capTarget == BindTarget::TameKey;
+
         if (keyField)
         {
             if (timedOut)                     s_capTarget = BindTarget::None;   // give up, keep old bind
@@ -3997,9 +4024,14 @@ namespace trinity::gui
             else if (pendKey == 0)
             {
                 if (escDown) s_capTarget = BindTarget::None;                    // cancel
-                else { const int vk = FirstKeyDown(); if (vk && vk != VK_ESCAPE) pendKey = vk; }
+                else
+                {
+                    const int vk = FirstKeyDown(modsOk);
+                    if (vk && vk != VK_ESCAPE)
+                        pendKey = vk | (modsOk ? hotkey::HeldModifiers() : 0);
+                }
             }
-            else if (!(GetAsyncKeyState(pendKey) & 0x8000))                     // commit once the key lifts
+            else if (!(GetAsyncKeyState(pendKey & hotkey::kVkMask) & 0x8000))  // commit once the key lifts
             {
                 *keyField = pendKey;
                 Settings::Save();                                               // binds persist regardless of Auto Save

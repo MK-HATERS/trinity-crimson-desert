@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "hotkey.h"
 #include "logger.h"
 #include "mod.h"
 #include "state.h"
@@ -243,7 +244,8 @@ namespace trinity
         // key falls back to the default; a 0 pad mask legitimately means "no
         // controller bind", so it is honoured as-is (fly binds use 0 to mean
         // "that direction disabled on the pad").
-        if (vals.openKeyVk > 0 && vals.openKeyVk <= 0xFF)
+        // Menu / marker / tame keys may carry Ctrl/Shift/Alt bits (hotkey.h).
+        if (vals.openKeyVk > 0 && hotkey::Valid(vals.openKeyVk))
             st.openKeyVk = vals.openKeyVk;
         st.openPadMask = vals.openPadMask & 0xFFFF;
         if (vals.flyUpKeyVk >= 0 && vals.flyUpKeyVk <= 0xFF)
@@ -252,10 +254,10 @@ namespace trinity
             st.flyDownKeyVk = vals.flyDownKeyVk;
         st.flyUpPadMask   = vals.flyUpPadMask   & 0x3FFFF;
         st.flyDownPadMask = vals.flyDownPadMask & 0x3FFFF;
-        if (vals.markerTeleportKeyVk >= 0 && vals.markerTeleportKeyVk <= 0xFF)
+        if (hotkey::Valid(vals.markerTeleportKeyVk))
             st.markerTeleportKeyVk = vals.markerTeleportKeyVk;
         st.markerTeleportPadMask = vals.markerTeleportPadMask & 0x3FFFF;
-        if (vals.tameKeyVk >= 0 && vals.tameKeyVk <= 0xFF)
+        if (hotkey::Valid(vals.tameKeyVk))
             st.tameKeyVk = vals.tameKeyVk;
         st.tamePadMask = vals.tamePadMask & 0x3FFFF;
         if (vals.markerFallbackHeight >= 50.0f && vals.markerFallbackHeight <= 5000.0f)

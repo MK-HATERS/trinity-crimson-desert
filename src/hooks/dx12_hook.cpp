@@ -14,6 +14,7 @@
 #include "input.h"
 #include "xinput_hook.h"
 #include "hdr_composite_shader.h"
+#include "../core/hotkey.h"
 #include "../core/logger.h"
 #include "../core/tick_metrics.h"
 #include "../core/localization.h"
@@ -969,7 +970,7 @@ namespace trinity::hooks
         if (!st.menuOpen && !st.textCapture && !st.rebindCapture)
         {
             static bool s_tameKeyWasDown = false, s_tamePadWasDown = false;
-            const bool keyDown = st.tameKeyVk != 0 && (GetAsyncKeyState(st.tameKeyVk) & 0x8000) != 0;
+            const bool keyDown = hotkey::Down(st.tameKeyVk);
             const bool padDown = st.tamePadMask != 0 &&
                                  (ui::PadButtonsWithTriggers() & st.tamePadMask) == st.tamePadMask;
             if ((keyDown && !s_tameKeyWasDown) || (padDown && !s_tamePadWasDown))
@@ -988,7 +989,7 @@ namespace trinity::hooks
             if (st.markerTeleportKeyVk != 0)
             {
                 static bool s_markerKeyWasDown = false;
-                const bool isDown = (GetAsyncKeyState(st.markerTeleportKeyVk) & 0x8000) != 0;
+                const bool isDown = hotkey::Down(st.markerTeleportKeyVk);
                 if (isDown && !s_markerKeyWasDown)
                     kbdHit = true;
                 s_markerKeyWasDown = isDown;

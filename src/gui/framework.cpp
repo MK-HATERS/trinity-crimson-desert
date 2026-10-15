@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "../core/hotkey.h"
 #include "../core/state.h"
 #include "../core/version.h"
 #include "../core/localization.h"
@@ -527,8 +528,7 @@ namespace trinity::ui
         // Keyboard bind via async key state - focus/subclass independent, so it
         // fires consistently where the old WndProc WM_KEYUP toggle didn't.
         static bool s_prevKey = false;
-        const int   vk        = State::Get().openKeyVk;
-        const bool  keyDown   = vk != 0 && (GetAsyncKeyState(vk) & 0x8000) != 0;
+        const bool  keyDown   = hotkey::Down(State::Get().openKeyVk);
         const bool  keyEdge   = keyDown && !s_prevKey;
         s_prevKey = keyDown;
 
